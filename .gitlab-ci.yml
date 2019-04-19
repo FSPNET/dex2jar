@@ -1,0 +1,16 @@
+image: docker:stable
+
+services:
+    - docker:dind
+
+variables:
+    DOCKER_DRIVER: overlay2
+
+before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+build_stable:
+    stage: build
+    script:
+        - docker build -t $CI_REGISTRY_IMAGE .
+        - docker push $CI_REGISTRY_IMAGE
